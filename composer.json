@@ -1,0 +1,14 @@
+{
+    "name": "christiandk00/risika-php-wrapper",
+    "description": "A wrapper for connecting to the Risika API",
+    "require": {
+        "guzzlehttp/guzzle": "^7.0"
+    },
+    "authors": [
+        {
+            "name": "christiandk00",
+            "email": "hej@christiannmadsen.dk"
+        }
+    ],
+    "minimum-stability": "dev"
+}
