@@ -46,6 +46,7 @@ class Risika
         $token = json_decode(base64_decode(str_replace('_', '/', str_replace('-','+',explode('.', $response['token'])[1]))));
 
         $this->tokenExpires = $token->exp - $this->expirationMargin;
+
     }
 
     private function token() {
@@ -164,7 +165,7 @@ class Risika
             foreach ($relation['functions'] as $function) {
                 if($function['function'] == "MANAGEMENT" && $function['valid_to'] == null OR $function['function'] == "CHIEF EXECUTIVE OFFICER" && $function['valid_to'] == null) {
                     if(!in_array($relation['name'], $currentDirectors)) {
-                        array_push($currentDirectors, $relation['name']);
+                        $currentDirectors[] = $relation['name'];
                     }
                 }
             }
@@ -182,7 +183,7 @@ class Risika
             foreach ($relation['functions'] as $function) {
                 if($function['function'] == "CHIEF EXECUTIVE OFFICER" && $function['valid_to'] == null) {
                     if(!in_array($relation['name'], $currentDirectors)) {
-                        array_push($currentDirectors, [$relation['name'], ]);
+                        $currentDirectors[] = $relation['name'];
                     }
                 }
             }
@@ -200,7 +201,7 @@ class Risika
             foreach ($relation['functions'] as $function) {
                 if($function['function'] == "CHIEF EXECUTIVE OFFICER" && $function['valid_to'] == null) {
                     if(!in_array($relation['name'], $currentDirectors)) {
-                        array_push($currentDirectors, [$relation['name'], ]);
+                        $currentDirectors = $relation['name'];
                     }
                 }
             }
@@ -211,7 +212,7 @@ class Risika
                 foreach ($relation['functions'] as $function) {
                     if($function['function'] == "MANAGEMENT" && $function['valid_to'] == null) {
                         if(!in_array($relation['name'], $currentDirectors)) {
-                            array_push($currentDirectors, [$relation['name'], ]);
+                            $currentDirectors[] = $relation['name'];
                         }
                     }
                 }
@@ -222,35 +223,37 @@ class Risika
         return $currentDirectors[0];
     }
 
+    /*
+     * Get either the CEO or the first director found
+     * */
     public function getCEOOrDirectorInfo($locale, $companyId) {
         $result = $this->getCompanyRelations($locale, $companyId);
 
         $currentDirectors = [];
+        $currentCEO = [];
 
         foreach ($result as $relation) {
             foreach ($relation['functions'] as $function) {
-                if($function['function'] == "CHIEF EXECUTIVE OFFICER" && $function['valid_to'] == null) {
-                    if(!in_array($relation['personal_id'], $currentDirectors)) {
-                        array_push($currentDirectors, [$relation['personal_id'], ]);
-                    }
-                }
-            }
-        }
 
-        if(empty($currentDirectors)){
-            foreach ($result as $relation) {
-                foreach ($relation['functions'] as $function) {
-                    if($function['function'] == "MANAGEMENT" && $function['valid_to'] == null) {
-                        if(!in_array($relation['personal_id'], $currentDirectors)) {
-                            array_push($currentDirectors, [$relation['personal_id'], ]);
+                if($function['valid_to'] != null) {
+                    continue;
+                }
+
+                if($function['function'] == "CHIEF EXECUTIVE OFFICER" OR $function['function'] == "MANAGEMENT") {
+                    if(!in_array($relation['personal_id'], $currentDirectors)) {
+                        if($function['function'] == "CHIEF EXECUTIVE OFFICER") {
+                            $currentCEO[] = $relation['personal_id'];
+                        }
+                        if($function['function'] == "MANAGEMENT") {
+                            $currentDirectors[] = $relation['personal_id'];
                         }
                     }
                 }
-            }
 
+            }
         }
 
-        return $currentDirectors[0];
+        return !empty($currentCEO) ? $currentCEO : $currentDirectors[0];
     }
 
 
@@ -264,7 +267,7 @@ class Risika
             foreach ($relation['functions'] as $function) {
                 if($function['function'] == "FOUNDER" && $function['valid_to'] == null) {
                     if(!in_array($relation['name'], $currentDirectors)) {
-                        array_push($currentDirectors, $relation['name']);
+                        $currentDirectors[] = $relation['name'];
                     }
                 }
             }

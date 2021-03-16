@@ -1,1 +1,5 @@
 /vendor/
+composer.lock
+.idea/vcs.xml
+.idea/Risika-PHP-Wrapper.iml
+.idea/modules.xml
