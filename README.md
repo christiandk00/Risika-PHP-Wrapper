@@ -1,4 +1,4 @@
-##About
+## About
 
 This is a PHP Wrapper for working with the [Risika API](https://api.risika.dk/docs/).
 
@@ -9,7 +9,7 @@ The package is only tested with the following countries:
 - Sweden
 - Norway
 
-##How to install
+## How to install
 
 Install via Composer by running
 ```
@@ -17,7 +17,7 @@ composer require christiandk00/risika-php-wrapper
 ```
 in your project directory.
 
-##Usage
+## Usage
 
 In order to use this package you will need a JWT token from Risika.
 
@@ -28,7 +28,7 @@ I suggest that you read the following about ID types for the API, as that will g
 
 There is a universel method for calling all "get" endpoints, but there is also methods for almost all endpoints. I will try to make exampels for all of them.
 
-##Setup
+## Setup
 
 To initialise the class you will need
 - A refresh token from Risika
@@ -43,7 +43,7 @@ use Risika\Risika;
 $risika = New Risika(env('RISIKA_REFRESH_TOKEN'), 'v1.2', 'da-DK')
 ````
 
-##Examples
+## Examples
 
 Make a get request to any Risika API endpoint
 ````
@@ -60,10 +60,10 @@ $risika->getBasicCompanyInfo('dk', '54562519');
 This will return the basic company information about Lego A/S (54562519)
 
 
-##Contributing
+## Contributing
 
 Any contribution is welcome! Just make a PR.
 
-##Help
+## Help
 
 I am open to help with questions about the wrapper. Just make a issue or shoot me an email at hej@christiannmadsen.dk
