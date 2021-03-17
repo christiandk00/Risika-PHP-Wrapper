@@ -25,7 +25,7 @@ class Risika
         $this->lang = $lang;
         $this->url = $this->baseUrl.$this->version;
 
-        return $this->refresh();
+        $this->refresh();
     }
 
     private function initializeClient() {
@@ -39,7 +39,7 @@ class Risika
 
     public function refresh() {
         $headers = ['headers' => ['Authorization' => $this->refreshToken, 'Content-Type' => 'application/json', 'Accept-Language' => $this->lang]];
-        $response = json_decode($this->initializeClient()->get($this->version.'/access/refresh_token', $headers)->getBody(),1);
+        $response = json_decode($this->client->get($this->version.'/access/refresh_token', $headers)->getBody(),1);
 
         $this->accessToken = $response['token'];
 
@@ -59,7 +59,7 @@ class Risika
 
     public function get($locale, $path) {
         $options = ['headers' => ['Authorization' => $this->token(), 'Content-Type' => 'application/json', 'Accept-Language' => $this->lang]];
-        return json_decode($this->initializeClient()->get($this->version.'/'.$locale.$path, $options)->getBody(), 1);
+        return json_decode($this->client->get($this->version.'/'.$locale.$path, $options)->getBody(), 1);
     }
 
 
